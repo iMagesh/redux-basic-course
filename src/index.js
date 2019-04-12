@@ -1,12 +1,40 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from "react";
+import ReactDOM from "react-dom";
+import { createStore } from "redux";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+function reducer(state = 0, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return state + 1;
+    case "DECREMENT":
+      return state - 1;
+    default:
+      return state;
+  }
+}
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const store = createStore(reducer);
+
+function increment() {
+  return store.dispatch({ type: "INCREMENT" });
+}
+
+function decrement() {
+  return store.dispatch({ type: "DECREMENT" });
+}
+
+const Counter = () => {
+  return (
+    <div>
+      {store.getState()}
+      <button onClick={increment}>+</button>
+      <button onClick={decrement}>-</button>
+    </div>
+  );
+};
+
+function render() {
+  ReactDOM.render(<Counter />, document.getElementById("root"));
+}
+store.subscribe(render);
+render();
